@@ -153,7 +153,8 @@ function SearchAlgorithm(docArray = [], ...parameters) {
         let returnArray = [];
         let count = [];
         temp.forEach((word) => {
-            let regex = new RegExp(word, 'g')
+            console.log('calculating termFrequency');
+            let regex = new RegExp(word, 'g');
             count = string.match(regex)
             if (count.length !== 0 && !returnArray.includes(word)) {
                 count = [count[0], count.length];
@@ -181,6 +182,7 @@ function SearchAlgorithm(docArray = [], ...parameters) {
 
     function inverseDocumentFrequency (docArray) {
         docArray.forEach((doc) => {
+            console.log('calculating InverseDocumentFrequency');
             let idf;
             let temp;
             let count = 0;
