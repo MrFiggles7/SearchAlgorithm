@@ -81,7 +81,7 @@ export default {
   created() {
     let vm = this;
     let promises = [];
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 200; i++) {
       let baseURL = 'https://random-data-api.com/api/';
       promises.push(
           // axios.get(baseURL + 'company/random_company').then(function (response) {
@@ -101,11 +101,11 @@ export default {
       this.restaurantSearchAlgorithm =
           new SearchAlgorithm(
               this.restaurantArray,
-              ["name", 10],
+              ["name", 100],
               ["description", 10],
               ["address"],
               ["review"],
-              ["type", 50]);
+              ["type", 100]);
       // this.businessSearchAlgorithm =
       //     new SearchAlgorithm(
       //         this.businessArray,

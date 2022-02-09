@@ -131,8 +131,9 @@ function SearchAlgorithm(docArray = [], ...parameters) {
     function TF_IDF(){
         calculateTermFrequency();
         console.log('calculated term frequency');
-        calculateInverseDocumentFrequency()
+        let calculatedIDF = calculateInverseDocumentFrequency()
         console.log('calculated inverse document frequency');
+        applyInverseDocumentFrequency(calculatedIDF);
         assignDocumentWeighting();
         console.log('assigned document weighting');
     }
@@ -172,47 +173,62 @@ function SearchAlgorithm(docArray = [], ...parameters) {
         docArray.forEach((doc)=>{
             truncatedArray.push(doc.searchIndex);
         })
-        truncatedArray = inverseDocumentFrequency(truncatedArray);
-        for(let i = 0; i < truncatedArray.length; i++){
-            docArray[i].searchIndex = truncatedArray[i]
-        }
+        return(inverseDocumentFrequency(truncatedArray));
+
+
     }
 
+    //idf = (Math.log(1+ (docArray.length) / count))
     function inverseDocumentFrequency (docArray) {
-        docArray.forEach((doc) => {
-            let idf;
-            let temp;
-            let count = 0;
+        let stringCompare = [];
+        let docArr = [];
+        console.log(docArr)
+        docArray.forEach((doc)=>{
 
-            doc.forEach((stringArr) => {
-                console.log('calculating inverse document frequency')
-                stringArr.string.forEach((term)=>{
-                    temp = term[0]
-                    docArray.forEach((doc) => {
-                        doc.forEach((stringArr)=>{
-                            if(stringArr.string.toString().includes(temp)){
-                                count++;
-                            }
-                        })
-                        // if (doc.includes(temp)) {
-                        //     count++;
-                        // }
-                    })
-                    idf = (Math.log(1+ (docArray.length) / count))
-                    term[1] = term[1] * idf;
-                    // console.log(term)
-                    let index = stringArr.string.indexOf(term)
-                    docArray[docArray.indexOf(doc)][doc.indexOf(stringArr)].string[index] = term;
+            docArr.push([]);
+            doc.forEach((stringArr)=>{
+                stringArr.string.forEach((string)=>{
+                    docArr[docArray.indexOf(doc)].push(string[0]);
+                    if(!stringCompare.includes(string[0])){
+                        stringCompare.push([string[0]])
+                    }
                 })
-
             })
-
         })
-        return docArray;
+        stringCompare.forEach((string)=>{
+            let count = 0;
+                docArr.forEach((doc)=>{
+                    console.log('calculating inverse document frequency')
+                    if(doc.includes(string[0])){
+                        count++;
+                    }
+                })
+            let idf = (Math.log(1+ (docArr.length) / count))
+            string.push(idf)
+        })
+
+        return stringCompare;
+    }
+
+    function applyInverseDocumentFrequency(stringArr){
+        stringArr.forEach((string)=>{
+            console.log('applying inverse document frequency')
+            docArray.forEach((doc)=>{
+                doc.searchIndex.forEach((stringArr)=>{
+                    stringArr.string.forEach((str)=>{
+                        if(str[0].includes(string[0])){
+                            str[1] = str[1] * string[1];
+                        }
+                    })
+
+                })
+            })
+        })
     }
 
     function assignDocumentWeighting(){
         docArray.forEach((doc)=>{
+            console.log('assigning document weighting')
             doc.searchIndex.forEach((stringArr)=>{
                 let weight;
                 if(stringArr.weight != null || stringArr.weight !== 0){
@@ -231,6 +247,7 @@ function SearchAlgorithm(docArray = [], ...parameters) {
 
     function reformatSearchIndex(){
         docArray.forEach((doc)=>{
+            console.log('reformatting search index')
             let newStringArr = [];
             doc.searchIndex.forEach((stringArr)=>{
                 stringArr.string.forEach((string)=>{
