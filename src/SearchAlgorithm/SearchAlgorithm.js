@@ -1,10 +1,6 @@
 import {stemmer} from "stemmer";
 import stopwords from "@/SearchAlgorithm/stopwords";
 
-
-//constructor takes argument for array of objects and string:int array for
-//object property and percentage weight for a given property
-//ex. new SearchAlgorithm(arrayOfObjects, [propertyIWantToSearchBy, percentageWeightAppliedToProperty])
 function SearchAlgorithm(docArray = [], ...parameters) {
 
 
@@ -22,8 +18,6 @@ function SearchAlgorithm(docArray = [], ...parameters) {
         let refDocs = [];
         let bestTerms = [];
 
-        // console.log(searchTerm)
-
         docArray.forEach((arr) => {
 
             arr.searchIndex.forEach((term) => {
@@ -39,7 +33,6 @@ function SearchAlgorithm(docArray = [], ...parameters) {
         })
 
         bestTerms.sort((a,b) => b.term[1] - a.term[1]);
-        console.log(bestTerms)
         bestTerms.forEach((term)=>{
             refDocs.push(term.refDoc)
         })
@@ -49,6 +42,8 @@ function SearchAlgorithm(docArray = [], ...parameters) {
     }
 
     //Constructor parameters instantiated to usable properties
+    // let searchableArray = [];
+
     let args = Array.prototype.slice.call(parameters)
 
     if(!Array.isArray(docArray) || docArray.length <= 0){
@@ -67,6 +62,7 @@ function SearchAlgorithm(docArray = [], ...parameters) {
             })
         }
     }
+    // console.log(searchableArray);
 
     //Perform All Search Calculations
     //truncate all parameters to remove excess information
@@ -150,12 +146,13 @@ function SearchAlgorithm(docArray = [], ...parameters) {
     }
 
     function termFrequency(string) {
+
         let temp = string.split(' ');
         let returnArray = [];
         let count = [];
         temp.forEach((word) => {
-            console.log('calculating termFrequency');
-            let regex = new RegExp(word, 'g');
+            console.log('calculating term frequency')
+            let regex = new RegExp(word, 'g')
             count = string.match(regex)
             if (count.length !== 0 && !returnArray.includes(word)) {
                 count = [count[0], count.length];
@@ -183,13 +180,12 @@ function SearchAlgorithm(docArray = [], ...parameters) {
 
     function inverseDocumentFrequency (docArray) {
         docArray.forEach((doc) => {
-            console.log('calculating InverseDocumentFrequency');
             let idf;
             let temp;
             let count = 0;
 
             doc.forEach((stringArr) => {
-
+                console.log('calculating inverse document frequency')
                 stringArr.string.forEach((term)=>{
                     temp = term[0]
                     docArray.forEach((doc) => {

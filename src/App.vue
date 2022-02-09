@@ -10,27 +10,35 @@
 
           placeholder="Search">
       </b-form-input>
-      <b-row>
-        <b-col v-for="bestResult in this.bestResult" :key="bestResult.id">
-          <b-card>
-            <b-card-title style="width: 15rem">
-              {{bestResult.name}}
-            </b-card-title>
-            <b-card-sub-title style="width: 15rem; font-size: .4rem">
-              {{bestResult.description}}
-            </b-card-sub-title>
-            <b-card-text style="width: 15rem; font-size: .5rem">
-              {{bestResult.address}}
-            </b-card-text>
-            <b-card-text style="width: 15rem; font-size: .5rem">
-              {{bestResult.review}}
-            </b-card-text>
-            <b-card-text style="width: 15rem; font-size: .8rem">
-              {{bestResult.type}}
-            </b-card-text>
-          </b-card>
-        </b-col>
-      </b-row>
+      <b-container>
+        <b-row>
+          <b-col cols="6" v-for="bestResult in this.bestResult" :key="bestResult.id">
+            <b-card>
+              <b-card-title style="width: 15rem">
+                {{ bestResult.name }}
+                <!--                {{ bestResult.business_name }}-->
+              </b-card-title>
+              <b-card-sub-title style="width: 15rem; font-size: .4rem">
+                {{ bestResult.description }}
+                <!--                {{ bestResult.bs_company_statement }}-->
+              </b-card-sub-title>
+              <b-card-text style="width: 15rem; font-size: .5rem">
+                {{ bestResult.address }}
+                <!--                {{ bestResult.catch_phrase }}-->
+              </b-card-text>
+              <b-card-text style="width: 15rem; font-size: .5rem">
+                {{ bestResult.review }}
+                <!--                {{ bestResult.buzzword }}-->
+              </b-card-text>
+              <b-card-text style="width: 15rem; font-size: .8rem">
+                {{ bestResult.type }}
+                <!--                {{ bestResult.industry }}-->
+              </b-card-text>
+            </b-card>
+          </b-col>
+        </b-row>
+      </b-container>
+
     </div>
   </div>
 </template>
@@ -44,58 +52,70 @@ export default {
 
   data() {
     return {
-      array: [],
+      restaurantArray: [],
+      businessArray: [],
       truncatedArray: [],
       searchArray: [],
       text: null,
       bestResult: [],
-
-      searchAlgorithm: [],
+      restaurantSearchAlgorithm: [],
+      businessSearchAlgorithm: [],
     }
   },
   components: {},
 
   watch: {
     text: function (){
-      this.bestResult = this.searchAlgorithm.Search(this.text, 20);
+      // this.bestResult = this.businessSearchAlgorithm.Search(this.text);
+      this.bestResult = this.restaurantSearchAlgorithm.Search(this.text);
     }
   },
 
   methods: {
-
   },
 
   mounted() {
-
   },
 
 
-
   created() {
-
-    var vm = this;
+    let vm = this;
     let promises = [];
     for (let i = 0; i < 100; i++) {
-
       let baseURL = 'https://random-data-api.com/api/';
-
-
       promises.push(
+          // axios.get(baseURL + 'company/random_company').then(function (response) {
+          //   vm.businessArray.push(response.data);
+          // })
+
           axios.get(baseURL + 'restaurant/random_restaurant').then(function (response) {
-            vm.array.push(response.data);
+            vm.restaurantArray.push(response.data);
           })
-      );
+
+
+      )
+
 
     }
-
     Promise.all(promises).then(() => {
+      this.restaurantSearchAlgorithm =
+          new SearchAlgorithm(
+              this.restaurantArray,
+              ["name", 10],
+              ["description", 10],
+              ["address"],
+              ["review"],
+              ["type", 50]);
+      // this.businessSearchAlgorithm =
+      //     new SearchAlgorithm(
+      //         this.businessArray,
+      //         ["business_name"],
+      //         ["bs_company_statement"],
+      //         ["catch_phrase"],
+      //         ["buzzword"],
+      //         ["industry"]);
 
-
-        this.searchAlgorithm = new SearchAlgorithm(this.array, ["name", 25], ["description", 10], ["address"], ["review"], ["type", 200]);
-    }).then(() => {
     })
-
-
   }
 }
 </script>
