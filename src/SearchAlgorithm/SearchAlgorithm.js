@@ -18,8 +18,6 @@ function SearchAlgorithm(docArray = [], ...parameters) {
         let refDocs = [];
         let bestTerms = [];
 
-        // console.log(searchTerm)
-
         docArray.forEach((arr) => {
 
             arr.searchIndex.forEach((term) => {
@@ -35,7 +33,6 @@ function SearchAlgorithm(docArray = [], ...parameters) {
         })
 
         bestTerms.sort((a,b) => b.term[1] - a.term[1]);
-        console.log(bestTerms)
         bestTerms.forEach((term)=>{
             refDocs.push(term.refDoc)
         })
@@ -149,10 +146,12 @@ function SearchAlgorithm(docArray = [], ...parameters) {
     }
 
     function termFrequency(string) {
+
         let temp = string.split(' ');
         let returnArray = [];
         let count = [];
         temp.forEach((word) => {
+            console.log('calculating term frequency')
             let regex = new RegExp(word, 'g')
             count = string.match(regex)
             if (count.length !== 0 && !returnArray.includes(word)) {
@@ -186,7 +185,7 @@ function SearchAlgorithm(docArray = [], ...parameters) {
             let count = 0;
 
             doc.forEach((stringArr) => {
-
+                console.log('calculating inverse document frequency')
                 stringArr.string.forEach((term)=>{
                     temp = term[0]
                     docArray.forEach((doc) => {
