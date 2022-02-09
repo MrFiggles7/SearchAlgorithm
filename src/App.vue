@@ -89,6 +89,8 @@ export default {
     }
 
     Promise.all(promises).then(() => {
+
+
         this.searchAlgorithm = new SearchAlgorithm(this.array, ["name", 25], ["description", 10], ["address"], ["review"], ["type", 200]);
     }).then(() => {
     })

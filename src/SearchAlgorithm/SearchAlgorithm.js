@@ -1,6 +1,10 @@
 import {stemmer} from "stemmer";
 import stopwords from "@/SearchAlgorithm/stopwords";
 
+
+//constructor takes argument for array of objects and string:int array for
+//object property and percentage weight for a given property
+//ex. new SearchAlgorithm(arrayOfObjects, [propertyIWantToSearchBy, percentageWeightAppliedToProperty])
 function SearchAlgorithm(docArray = [], ...parameters) {
 
 
@@ -45,8 +49,6 @@ function SearchAlgorithm(docArray = [], ...parameters) {
     }
 
     //Constructor parameters instantiated to usable properties
-    // let searchableArray = [];
-
     let args = Array.prototype.slice.call(parameters)
 
     if(!Array.isArray(docArray) || docArray.length <= 0){
@@ -65,7 +67,6 @@ function SearchAlgorithm(docArray = [], ...parameters) {
             })
         }
     }
-    // console.log(searchableArray);
 
     //Perform All Search Calculations
     //truncate all parameters to remove excess information
